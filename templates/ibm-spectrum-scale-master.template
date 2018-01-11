@@ -195,7 +195,7 @@
             "Type": "String"
         },
         "SpectrumS3Bucket": {
-            "Description": "The name of the S3 bucket to be used for data store. You can enter your owned bucket name here or left blank to create new S3 bucket.",
+            "Description": "The name of the S3 bucket to be used for data store. If you don’t have an existing S3 bucket to reuse then leave this field blank so template would create new S3 bucket",
             "AllowedPattern": "^[0-9a-z]?([0-9a-z-/]*[0-9a-z])*$",
             "Type": "String",
             "MinLength": "0",
