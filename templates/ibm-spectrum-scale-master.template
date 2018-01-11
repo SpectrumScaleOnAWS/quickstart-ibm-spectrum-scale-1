@@ -183,23 +183,23 @@
         "QSS3BucketName": {
             "AllowedPattern": "^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$",
             "ConstraintDescription": "Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen (-).",
-            "Default": "quickstart-reference",
+            "Default": "ibm-spectrum-scale",
             "Description": "S3 bucket name for the Quick Start assets. This string can include numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen (-).",
             "Type": "String"
         },
         "QSS3KeyPrefix": {
             "AllowedPattern": "^[0-9a-zA-Z-/]*$",
             "ConstraintDescription": "Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/).",
-            "Default": "ibm/spectrum/scale/latest/",
+            "Default": "quickstart-ibm-spectrum-scale-v1-2/QuickStart-Test/spectrum-scale-01102018/",
             "Description": "S3 key prefix for the Quick Start assets. Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/).",
             "Type": "String"
         },
         "SpectrumS3Bucket": {
-            "Description": "The name of the S3 bucket to be used for data store and SSH key synchronization between nodes. If you do not have an existing S3 bucket to reuse, you must create a new S3 bucket before launching this Quick Start.",
-            "AllowedPattern": "^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$",
+            "Description": "The name of the S3 bucket to be used for data store. You can enter your owned bucket name here or left blank to create new S3 bucket.",
+            "AllowedPattern": "^[0-9a-z]?([0-9a-z-/]*[0-9a-z])*$",
             "Type": "String",
-            "MinLength": "1",
-            "ConstraintDescription": "Must own the specified bucket."
+            "MinLength": "0",
+            "ConstraintDescription": "S3 bucket name can include numbers, lowercase letters, lowercase letters, and hyphens (-). It cannot start or end with a hyphen (-)."
         },
         "BlockSize": {
             "Description": "File system block size.",
