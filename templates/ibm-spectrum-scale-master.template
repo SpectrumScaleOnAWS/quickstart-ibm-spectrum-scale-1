@@ -195,10 +195,11 @@
             "Type": "String"
         },
         "SpectrumS3Bucket": {
-            "Description": "The name of the S3 bucket to be used for data store. If you don’t have an existing S3 bucket to reuse then leave this field blank so template would create new S3 bucket",
+            "Description": "The name of the S3 bucket to be used for data store.  If you choose not to create an S3 bucket, simply leave the SpectrumS3Bucket parameter blank, and a new S3 buicket will be created by this Quick Start.",
             "AllowedPattern": "^[0-9a-z]?([0-9a-z-/]*[0-9a-z])*$",
             "Type": "String",
             "MinLength": "0",
+            "Default": "",
             "ConstraintDescription": "S3 bucket name can include numbers, lowercase letters, lowercase letters, and hyphens (-). It cannot start or end with a hyphen (-)."
         },
         "BlockSize": {
@@ -1046,6 +1047,16 @@
         "SpectrumScaleVersion":{
            "Value": "4.2.3.1",
            "Description": "Spectrum Scale version included with this release" 
+        },
+        "SpectrumS3Bucket": {
+           "Value": {
+              "Fn::GetAtt": [
+                       "ClusterStack",
+                       "Outputs.SpectrumS3Bucket"
+               ]
+           },
+           "Description": "Spectrum Scale S3 bucket name"
+           
         }
         
   	}

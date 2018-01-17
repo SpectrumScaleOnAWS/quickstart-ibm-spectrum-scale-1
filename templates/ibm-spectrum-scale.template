@@ -480,10 +480,11 @@
             "ConstraintDescription": "Must be a valid email address."
         },
         "SpectrumS3Bucket": {
-            "Description": "The name of the S3 bucket to be used for data store. If you don’t have an existing S3 bucket to reuse then leave this field blank so template would create new S3 bucket",
+            "Description": "The name of the S3 bucket to be used for data store.  If you choose not to create an S3 bucket, simply leave the SpectrumS3Bucket parameter blank, and a new S3 buicket will be created by this Quick Start.",
             "AllowedPattern": "^[0-9a-z]?([0-9a-z-/]*[0-9a-z])*$",
             "Type": "String",
             "MinLength": "0",
+            "Default": "",
             "ConstraintDescription": "S3 bucket name can include numbers, lowercase letters, lowercase letters, and hyphens (-). It cannot start or end with a hyphen (-)."
         }
     },
@@ -1282,10 +1283,14 @@
                                             "echo admin:$admin\n",
                                             "if [ $admin == True ]\n",
                                             "then\n",
-                                            "    rm -rf ~/.ssh/id_rsa ~/.ssh/id_rsa.pub\n",
-                                            "    echo --CREATING KEYS TO SETUP PASSWORDLESS--\n",
-                                            "    ssh-keygen -q -b 4096 -t rsa -N \"\" -f ~/.ssh/id_rsa\n",
-                                            "    cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys\n",
+                                            "    if [ -e ~/.ssh/id_rsa.pub -a -e ~/.ssh/id_rsa ]\n",
+                                            "    then\n",
+                                            "        echo --WILL USE EXISTING KEYS--\n",
+                                            "    else\n",
+                                            "        echo --CREATING KEYS TO SETUP PASSWORDLESS--\n",
+                                            "        ssh-keygen -q -b 4096 -t rsa -N \"\" -f ~/.ssh/id_rsa\n",
+                                            "        cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys\n",
+                                            "    fi\n",
                                             "    chmod 600 ~/.ssh/id_rsa\n",
                                             "    chmod 600 ~/.ssh/id_rsa.pub\n",
                                             "    chmod 600 ~/.ssh/authorized_keys\n",
@@ -1609,6 +1614,7 @@
                                             "    echo Waiting...$timeout \n",
                                             "    sleep $timeout\n",
                                             "    timeout=0\n",
+                                            "    clusterName=$hostname\n",
                                             "    cat /var/log/clusterNodeInfo | awk '{print $1}' | while read nodeIP\n",
                                             "    do\n",
                                             "        ping $nodeIP -c 3\n",
@@ -1625,7 +1631,7 @@
                                             "    fi\n",
                                             "    echo ALL KEYS HAS BEEN SUCCESSFULLY DISTRIBUTED ON ALL NODES\n",
                                             "    echo Create GPFS cluster\n",
-                                            "    /usr/lpp/mmfs/bin/mmcrcluster -N /var/log/nodeDescFile --ccr-enable -r /usr/bin/ssh -R /usr/bin/scp -A\n",
+                                            "    /usr/lpp/mmfs/bin/mmcrcluster -N /var/log/nodeDescFile -C $clusterName --ccr-enable -r /usr/bin/ssh -R /usr/bin/scp -A\n",
                                             "    if [ $? != 0 ]\n",
                                             "    then\n",
                                             "        echo lets retry after sometime\n",
@@ -3029,7 +3035,7 @@
            "Value": "4.2.3.1",
            "Description": "Spectrum Scale version included with this release" 
         },
-        "SpectrumScaleS3Bucket": {
+        "SpectrumS3Bucket": {
            "Value": {
               "Fn::If": [
                    "SpectrumS3BucketProvided",
@@ -3041,7 +3047,12 @@
                    }
               ] 
            },
-           "Description": "Spectrum Scale S3 bucket name"
+           "Description": "Spectrum Scale S3 bucket name",
+           "Export": {
+                "Name": {
+                    "Fn::Sub": "${AWS::StackName}-SpectrumS3Bucket"
+                }
+            }
         }
     }
 }
