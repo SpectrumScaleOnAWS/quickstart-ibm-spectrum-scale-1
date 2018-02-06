@@ -45,6 +45,16 @@
             "ConstraintDescription": "Two Availability Zones must be added."
         }
     },
+    "Mappings": {
+        "AWSAMIRegionMap": {
+            "AMI": {
+                "AWSNATHVM": "amzn-ami-vpc-nat-hvm-2017.03.0.20170401-x86_64-ebs"
+            },
+            "us-gov-west-1": {
+                "AWSNATHVM": "ami-3f0a8f5e"
+            }
+        }
+    },
     "Conditions":{
         "GovCloudCondition": {
             "Fn::Equals": [

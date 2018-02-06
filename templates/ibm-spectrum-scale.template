@@ -166,7 +166,7 @@
             ]
         },
         "DataReplica": {
-            "Description": "Number of replica copies of data across the all cluster nodes on two AZs.",
+            "Description": "Number of replica copies of data across the cluster nodes.",
             "Type": "Number",
             "Default": "2",
             "AllowedValues": [
@@ -576,7 +576,7 @@
 	           	"1"
            	]     
         },
-        "SpectrumS3BucketProvided": {
+        "SpectrumS3BucketNotProvided": {
            "Fn::Equals": [
                 {
                     "Ref": "SpectrumS3Bucket"
@@ -770,9 +770,9 @@
                                         "ec2:DescribeInstanceRecoveryAttribute",
                                         "ec2:RecoverInstances",
                                         "ssm:DescribeParameters",
-      									                "ssm:PutParameter",
-      									                "ssm:GetParameters",
-      									                "ssm:DeleteParameter"
+      									"ssm:PutParameter",
+      									"ssm:GetParameters",
+      									"ssm:DeleteParameter"
                                     ],
                                     "Effect": "Allow"
                                 },
@@ -970,25 +970,7 @@
         },
         "SpectrumScaleS3Bucket": {
             "Type": "AWS::S3::Bucket",
-            "Condition": "SpectrumS3BucketProvided",
-            "Properties": {
-               "Tags": [
-                    {
-                        "Key": "Name",
-                        "Value": {
-                            "Fn::Join": [
-                                "",
-                                [
-                                    {
-                                        "Ref": "AWS::StackId"
-                                    },
-                                    " - spectrum-scale-bucket"
-                                ]
-                            ]
-                        }
-                    }
-                ]
-            }   
+            "Condition": "SpectrumS3BucketNotProvided"  
          },
         "ServerNodeLaunchConfig": {
             "Type": "AWS::AutoScaling::LaunchConfiguration",
@@ -1569,7 +1551,6 @@
                                             "IFS=' ' read -a adminArr <<< `cat /var/log/instance_server.out | awk '{print $4,$1}' | sort | awk '{print $2}'`\n",
                                             "ADMIN_INS=${adminArr[0]}\n",
                                             "echo ADMIN_INS=$ADMIN_INS\n",
-                                            "echo adminArr:$adminArr\n",
                                             "adminNode=$(cat /var/log/instance_server.out | grep ${adminArr[0]} | awk '{print $2}')\n",
                                             "echo adminNode=$adminNode\n",
                                             "if [ $INSTANCE_ID == $ADMIN_INS ]\n",
@@ -2774,7 +2755,7 @@
                             "02_gpfs-compute-setup": {
                                 "command": "/usr/bin/gpfs-compute-setup.sh | while IFS= read -r line; do printf \"%s [INFO] %s\n\" \"$(date)\" \"$line\"; done >> /var/log/gpfs/gpfs-compute-setup.log 2>&1"
                             },
-                            "03_gpfs-compute-setup": {
+                            "03_gpfs-passwordless-setup": {
                                 "command": "/usr/bin/gpfs-passwordless-setup.sh | while IFS= read -r line; do printf \"%s [INFO] %s\n\" \"$(date)\" \"$line\"; done >> /var/log/gpfs/gpfs-passwordless-setup.log 2>&1"
                             },
                             "04_gpfs-auto-recovery-setup": {
@@ -3038,7 +3019,7 @@
         "SpectrumS3Bucket": {
            "Value": {
               "Fn::If": [
-                   "SpectrumS3BucketProvided",
+                   "SpectrumS3BucketNotProvided",
                    { 
                      "Ref": "SpectrumScaleS3Bucket"
                    },

@@ -195,7 +195,7 @@
             "Type": "String"
         },
         "SpectrumS3Bucket": {
-            "Description": "The name of the S3 bucket to be used for data store.  If you choose not to create an S3 bucket, simply leave the SpectrumS3Bucket parameter blank, and a new S3 buicket will be created by this Quick Start.",
+            "Description": "The name of the S3 bucket to be used for data store.  If you choose not to create an S3 bucket, simply leave the SpectrumS3Bucket parameter blank, and a new S3 bucket will be created by this Quick Start.",
             "AllowedPattern": "^[0-9a-z]?([0-9a-z-/]*[0-9a-z])*$",
             "Type": "String",
             "MinLength": "0",
