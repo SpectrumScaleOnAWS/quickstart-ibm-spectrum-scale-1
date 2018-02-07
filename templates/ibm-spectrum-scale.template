@@ -1940,7 +1940,7 @@
                                                "Ref": "AWS::Region"
                                             },
                                             "\n",
-                                            "       if [ $? != ]\n",
+                                            "       if [ $? != 0 ]\n",
                                             "       then\n",
                                             "           Failed to delete ssh keys...exiting..\n",
                                             "           exit\n",
